@@ -13,6 +13,7 @@ on the aggregation context in which the logging occurs. See the
 
 import contextlib
 import logging
+import shutil
 import subprocess
 import uuid
 from collections import defaultdict
@@ -325,5 +326,34 @@ def nvidia_smi_gpu_memory_stats():
     return out_dict
 
 
+def rocm_smi_gpu_memory_stats():
+    """
+    Parse the rocm-smi output and extract the memory used stats.
+    """
+    out_dict = {}
+    try:
+        sp = subprocess.Popen(
+            ["rocm-smi", "--showmemuse", "--csv"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            close_fds=True,
+        )
+        out_str = sp.communicate()
+        out_list = out_str[0].decode("utf-8").strip().split("\n")
+        for item in out_list[1:]:
+            gpu_idx, mem_used, _, _ = item.split(",")
+            gpu_key = f"gpu_{gpu_idx.strip()}_mem_used_%"
+            out_dict[gpu_key] = mem_used
+    except FileNotFoundError:
+        logging.error("Failed to find the 'rocm-smi' executable for printing GPU stats")
+    except subprocess.CalledProcessError as e:
+        logging.error(f"rocm-smi returned non zero error code: {e.returncode}")
+
+    return out_dict
+
+
 def get_nvidia_smi_gpu_memory_stats_str():
-    return "nvidia-smi stats: {}".format(nvidia_smi_gpu_memory_stats())
+    if shutil.which("nvidia-smi"):
+        return "nvidia-smi stats: {}".format(nvidia_smi_gpu_memory_stats())
+    else:
+        return "rocm-smi stats: {}".format(rocm_smi_gpu_memory_stats())

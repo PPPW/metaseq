@@ -91,7 +91,7 @@ if "--no_megatron" not in sys.argv:
     # Reference:
     # https://github.com/ngoyal2707/Megatron-LM/commit/9a16189ab1b5537205c708f8c8f952f2ae2ae72b
     extension_modules.append(
-        CppExtension(
+        CUDAExtension(
             "metaseq.modules.megatron.fused_kernels.scaled_upper_triang_masked_softmax_cuda",
             sources=[
                 "metaseq/modules/megatron/fused_kernels/scaled_upper_triang_masked_softmax.cpp",
@@ -101,17 +101,14 @@ if "--no_megatron" not in sys.argv:
                 "cxx": ["-O3"],
                 "nvcc": [
                     "-O3",
-                    "--use_fast_math",
                     "-U__CUDA_NO_HALF_OPERATORS__",
                     "-U__CUDA_NO_HALF_CONVERSIONS__",
-                    "--expt-relaxed-constexpr",
-                    "--expt-extended-lambda",
                 ],
             },
         )
     )
     extension_modules.append(
-        CppExtension(
+        CUDAExtension(
             "metaseq.modules.megatron.fused_kernels.scaled_masked_softmax_cuda",
             sources=[
                 "metaseq/modules/megatron/fused_kernels/scaled_masked_softmax.cpp",
@@ -121,11 +118,8 @@ if "--no_megatron" not in sys.argv:
                 "cxx": ["-O3"],
                 "nvcc": [
                     "-O3",
-                    "--use_fast_math",
                     "-U__CUDA_NO_HALF_OPERATORS__",
                     "-U__CUDA_NO_HALF_CONVERSIONS__",
-                    "--expt-relaxed-constexpr",
-                    "--expt-extended-lambda",
                 ],
             },
         )
@@ -176,9 +170,7 @@ if "--no_apex" not in sys.argv:
             extra_compile_args={
                 "cxx": ["-O3"],
                 "nvcc": [
-                    "-lineinfo",
                     "-O3",
-                    "--use_fast_math",
                 ],
             },
         )
@@ -192,23 +184,23 @@ if "--no_apex" not in sys.argv:
             ],
             extra_compile_args={
                 "cxx": ["-O3"],
-                "nvcc": ["-maxrregcount=50", "-O3", "--use_fast_math"],
+                "nvcc": ["-O3", "-D__HIP_PLATFORM_HCC__"],
             },
         )
     )
-    extension_modules.append(
-        CUDAExtension(
-            name="fused_dense_cuda",
-            sources=[
-                "metaseq/modules/apex/fused_dense.cpp",
-                "metaseq/modules/apex/fused_dense_cuda.cu",
-            ],
-            extra_compile_args={
-                "cxx": ["-O3"],
-                "nvcc": ["-O3"],
-            },
-        )
-    )
+    # extension_modules.append(
+    #     CUDAExtension(
+    #         name="fused_dense_cuda",
+    #         sources=[
+    #             "metaseq/modules/apex/fused_dense.cpp",
+    #             "metaseq/modules/apex/fused_dense_cuda.cu",
+    #         ],
+    #         extra_compile_args={
+    #             "cxx": ["-O3"],
+    #             "nvcc": ["-O3"],
+    #         },
+    #     )
+    # )
     # --global-option="--deprecated_fused_adam"
     extension_modules.append(
         CUDAExtension(
@@ -220,7 +212,7 @@ if "--no_apex" not in sys.argv:
             # include_dirs=[os.path.join(this_dir, "csrc")],
             extra_compile_args={
                 "cxx": ["-O3"],
-                "nvcc": ["-O3", "--use_fast_math"],
+                "nvcc": ["-O3"],
             },
         )
     )

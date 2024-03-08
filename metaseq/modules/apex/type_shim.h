@@ -384,7 +384,7 @@ __device__ __forceinline__ T reduce_block_into_lanes
 
     #pragma unroll
     for(int i = 16; i >= lanes; i >>= 1)
-      final = final + __shfl_down_sync(0xffffffff, final, i);
+      final = final + __shfl_down(0xffffffff, final, i);
   }
 
   if(share_result)
@@ -434,7 +434,7 @@ __device__ __forceinline__ T reduce_block_into_lanes_max_op
 
     #pragma unroll
     for(int i = 16; i >= lanes; i >>= 1)
-      final = fmaxf(fabsf(final), fabsf(__shfl_down_sync(0xffffffff, final, i)));
+      final = fmaxf(fabsf(final), fabsf(__shfl_down(0xffffffff, final, i)));
   }
 
   if(share_result)

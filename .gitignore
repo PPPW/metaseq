@@ -135,6 +135,9 @@ data-bin/
 .vscode/settings.json
 .vscode/launch.json
 
+# Visual Studio
+.vs/
+
 # Experimental Folder
 experimental/*
 

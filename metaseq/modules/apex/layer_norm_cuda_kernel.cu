@@ -333,9 +333,17 @@ void cuWelfordMuSigma2(
 template<typename U> U rsqrt(U v) {
   return U(1) / sqrt(v);
 }
+
+#if defined __HIP_PLATFORM_HCC__
+__device__ float rsqrt(float v) {
+  return rsqrtf(v);
+}
+#else
 template<> float rsqrt(float v) {
   return rsqrtf(v);
 }
+#endif
+
 template<> double rsqrt(double v) {
   return rsqrt(v);
 }
