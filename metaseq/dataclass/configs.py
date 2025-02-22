@@ -782,16 +782,16 @@ class EMAConfig(MetaseqDataclass):
 
 @dataclass
 class MetaseqConfig(MetaseqDataclass):
-    common: CommonConfig = CommonConfig()
-    common_eval: CommonEvalConfig = CommonEvalConfig()
-    distributed_training: DistributedTrainingConfig = DistributedTrainingConfig()
-    dataset: DatasetConfig = DatasetConfig()
-    optimization: OptimizationConfig = OptimizationConfig()
-    checkpoint: CheckpointConfig = CheckpointConfig()
-    generation: GenerationConfig = GenerationConfig()
-    eval_lm: EvalLMConfig = EvalLMConfig()
-    reshard: ReshardConfig = ReshardConfig()
-    ema: EMAConfig = EMAConfig()
+    common: CommonConfig = field(default_factory=CommonConfig)
+    common_eval: CommonEvalConfig = field(default_factory=CommonEvalConfig)
+    distributed_training: DistributedTrainingConfig = field(default_factory=DistributedTrainingConfig)
+    dataset: DatasetConfig = field(default_factory=DatasetConfig)
+    optimization: OptimizationConfig = field(default_factory=OptimizationConfig)
+    checkpoint: CheckpointConfig = field(default_factory=CheckpointConfig)
+    generation: GenerationConfig = field(default_factory=GenerationConfig)
+    eval_lm: EvalLMConfig = field(default_factory=EvalLMConfig)
+    reshard: ReshardConfig = field(default_factory=ReshardConfig)
+    ema: EMAConfig = field(default_factory=EMAConfig)
     model: Any = MISSING
     task: Any = MISSING
     criterion: Any = MISSING
