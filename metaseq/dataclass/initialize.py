@@ -4,6 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 """isort:skip_file"""
 
+from dataclasses import _MISSING_TYPE
 import logging
 
 from hydra.core.config_store import ConfigStore
@@ -18,7 +19,11 @@ def hydra_init(cfg_name="base_config") -> None:
     cs.store(name=cfg_name, node=MetaseqConfig)
 
     for k in MetaseqConfig.__dataclass_fields__:
-        v = MetaseqConfig.__dataclass_fields__[k].default
+        f = MetaseqConfig.__dataclass_fields__[k]
+        if not isinstance(f.default_factory, _MISSING_TYPE):
+            v = f.default_factory()
+        else:
+            v = f.default
         try:
             cs.store(name=k, node=v)
         except BaseException:

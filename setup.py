@@ -263,7 +263,7 @@ def do_setup():
             # "editdistance",
             "fire",
             "flask>=2.2.5",  # for api
-            "hydra-core>=1.1.0,<1.2",
+            "hydra-core==1.3.2",
             "ipdb",
             "ipython",
             "Jinja2==3.1.1",  # for evals
@@ -271,7 +271,7 @@ def do_setup():
             "more_itertools",
             "ninja",
             'numpy; python_version>="3.7"',
-            "omegaconf<=2.1.1",
+            "omegaconf==2.3.0",
             "portalocker>=2.5",
             "pre-commit",
             "pytest",

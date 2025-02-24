@@ -23,7 +23,7 @@ from metaseq.dataclass.constants import (
 class MetaseqDataclass:
     """metaseq base dataclass that supported fetching attributes and metas"""
 
-    _name: Optional[str] = None
+    _name: Optional[str] = field(default_factory=lambda: None)
 
     @staticmethod
     def name():
