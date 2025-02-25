@@ -307,6 +307,7 @@ class SequeuceParallelTransformerBlock(torch.autograd.Function):
             out_proj_out,
             ctx.layer_norm_normalized_shape,
             ctx.eps,
+            False,
         )
         grad_attention_output = grad_attention_output + residual_grad
 
@@ -373,6 +374,7 @@ class SequeuceParallelTransformerBlock(torch.autograd.Function):
             input,
             ctx.layer_norm_normalized_shape,
             ctx.eps,
+            False,
         )
         grad_input = grad_input + residual_grad
         return (
